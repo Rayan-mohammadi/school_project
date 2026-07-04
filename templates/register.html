@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ثبت دانش‌آموز</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/sahel-font@v3.4.0/dist/font-face.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* ===== تنظیمات صفحه ثبت ===== */
+        .register-body {
+            background: #eef2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 25px;
+            direction: rtl;
+        }
+
+        .register-wrapper {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 45px;
+            padding: 40px 45px;
+            box-shadow: 0 30px 60px rgba(0, 20, 30, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+        }
+
+        /* دکمه برگشت در بالا (سمت راست) */
+        .register-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .back-link-top {
+            color: #1a2b3c;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 24px;
+            border-radius: 40px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            transition: 0.25s;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: sahel, sans-serif;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .back-link-top:hover {
+            background: #ffffff;
+            border-color: #b7c9dd;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+            transform: translateY(-1px);
+        }
+
+        .back-link-top i {
+            font-size: 1.2rem;
+        }
+
+        .register-wrapper h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #1a2b3c;
+            border-bottom: 3px solid #e9eef3;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-family: sahel, sans-serif;
+        }
+
+        .btn-show-list {
+            display: inline-block;
+            padding: 12px 28px;
+            background: #e9eef3;
+            border-radius: 60px;
+            font-weight: 600;
+            color: #1f3345;
+            cursor: pointer;
+            border: 2px solid #dce4ed;
+            transition: 0.2s;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+            font-family: sahel, sans-serif;
+        }
+
+        .btn-show-list:hover {
+            background: #dce4ed;
+            border-color: #2b4b6e;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px 35px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 6px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: 600;
+            color: #1f3345;
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+            font-family: sahel, sans-serif;
+        }
+
+        label .required {
+            color: #d1453b;
+            margin-right: 3px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 13px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 18px;
+            font-size: 1rem;
+            background: #fafcfe;
+            transition: 0.2s;
+            outline: none;
+            color: #1a2b3c;
+            font-family: sahel, sans-serif;
+        }
+
+        input:focus, select:focus {
+            border-color: #2b4b6e;
+            box-shadow: 0 0 0 5px rgba(43, 75, 110, 0.08);
+        }
+
+        /* اعداد فارسی در اینپوت‌ها */
+        input[type="text"],
+        input[type="number"],
+        input[type="file"] {
+            font-family: sahel, sans-serif;
+        }
+
+        /* فایل عکس */
+        .file-upload-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .custom-file-btn {
+            background: #e9eef3;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            color: #1f3345;
+            cursor: pointer;
+            border: 2px dashed #b7c9dd;
+            font-size: 0.95rem;
+            font-family: sahel, sans-serif;
+        }
+
+        .custom-file-btn:hover {
+            background: #dce4ed;
+            border-color: #2b4b6e;
+        }
+
+        #file-name {
+            color: #4a6a85;
+            font-size: 0.9rem;
+            background: #f4f7fb;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-family: sahel, sans-serif;
+        }
+
+        #photo-upload {
+            display: none;
+        }
+
+        .photo-preview-wrapper {
+            grid-column: 1 / -1;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .photo-preview-wrapper.show {
+            display: block;
+        }
+
+        .photo-preview-wrapper img {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 16px;
+            border: 3px solid #e9eef3;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            object-fit: cover;
+        }
+
+        /* خطاها */
+        .error-msg {
+            color: #d1453b;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-top: 5px;
+            padding-right: 6px;
+            display: none;
+            font-family: sahel, sans-serif;
+        }
+
+        .error-msg.show {
+            display: block;
+        }
+
+        /* دکمه ثبت */
+        .btn-submit {
+            grid-column: 1 / -1;
+            padding: 17px;
+            background: #0b1e2b;
+            color: #fff;
+            border: none;
+            border-radius: 60px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.25s;
+            margin-top: 15px;
+            box-shadow: 0 8px 25px rgba(11, 30, 43, 0.2);
+            font-family: sahel, sans-serif;
+        }
+
+        .btn-submit:hover {
+            background: #1a3345;
+            transform: scale(1.01);
+            box-shadow: 0 12px 35px rgba(11, 30, 43, 0.3);
+        }
+
+        /* ===== مودال لیست دانش‌آموزان ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 35px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 85vh;
+            padding: 30px 35px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow-y: auto;
+            direction: rtl;
+        }
+
+        .modal-close {
+            position: sticky;
+            top: 0;
+            float: left;
+            background: #f0f4f8;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: sahel, sans-serif;
+        }
+
+        .modal-close:hover {
+            background: #dce4ed;
+        }
+
+        .modal-content h3 {
+            font-size: 1.8rem;
+            color: #1a2b3c;
+            margin-bottom: 20px;
+            text-align: center;
+            font-family: sahel, sans-serif;
+        }
+
+        .student-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            font-family: sahel, sans-serif;
+        }
+
+        .student-table th {
+            background: #f0f4f8;
+            color: #1a2b3c;
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 3px solid #dce4ed;
+            font-family: sahel, sans-serif;
+        }
+
+        .student-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9eef3;
+            vertical-align: middle;
+            font-family: sahel, sans-serif;
+        }
+
+        .student-table tr:hover td {
+            background: #f8fafc;
+        }
+
+        .student-table .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #dce4ed;
+        }
+
+        /* ===== Toast ===== */
+        #toast {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: #ffffff;
+            padding: 18px 28px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 20, 30, 0.2);
+            z-index: 9999;
+            max-width: 400px;
+            min-width: 260px;
+            text-align: center;
+            border-right: 8px solid #27ae60;
+            opacity: 0;
+            transform: translateX(80px);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            direction: rtl;
+        }
+
+        #toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast-message {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1a2b3c;
+            margin-bottom: 10px;
+            font-family: sahel, sans-serif;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 5px;
+            background: #e9eef3;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #27ae60;
+            border-radius: 10px;
+            transition: width 0.1s linear;
+        }
+
+        /* ===== واکنش‌گرایی ===== */
+        @media (max-width: 768px) {
+            .register-wrapper {
+                padding: 25px 18px;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            #toast {
+                top: 20px;
+                right: 20px;
+                left: 20px;
+                max-width: none;
+                min-width: auto;
+            }
+            .modal-content {
+                padding: 20px 15px;
+            }
+            .register-top-bar {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .back-link-top {
+                font-size: 0.85rem;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body class="register-body">
+
+    <!-- Toast موفقیت -->
+    <div id="toast">
+        <div class="toast-message">✅ دانش‌آموز با موفقیت ثبت شد!</div>
+        <div class="progress-container">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="register-wrapper">
+        <!-- نوار بالا با دکمه برگشت -->
+        <div class="register-top-bar">
+            <h2 style="border:none; padding:0; margin:0; font-size:1.8rem;">📋 ثبت دانش‌آموز جدید</h2>
+            <a href="{{ url_for('index') }}" class="back-link-top">
+                <i class="ri-arrow-right-s-line"></i> بازگشت
+            </a>
+        </div>
+
+        <!-- دکمه نمایش لیست دانش‌آموزان -->
+        <button class="btn-show-list" onclick="showStudentList()">
+            <i class="ri-list-unordered"></i> مشاهده لیست دانش‌آموزان
+        </button>
+
+        <form id="studentForm" method="POST" action="{{ url_for('register') }}" enctype="multipart/form-data">
+            <div class="form-grid">
+                <!-- نام -->
+                <div class="form-group">
+                    <label>نام <span class="required">*</span></label>
+                    <input type="text" name="first_name" id="first_name" value="{{ form_data.first_name }}" placeholder="نام را وارد کنید">
+                    <div class="error-msg {% if errors.first_name %}show{% endif %}" id="first_name_error">
+                        {{ errors.first_name if errors.first_name else 'وارد کردن این فیلد الزامی است' }}
+                    </div>
+                </div>
+
+                <!-- نام خانوادگی -->
+                <div class="form-group">
+                    <label>نام خانوادگی <span class="required">*</span></label>
+                    <input type="text" name="last_name" id="last_name" value="{{ form_data.last_name }}" placeholder="نام خانوادگی را وارد کنید">
+                    <div class="error-msg {% if errors.last_name %}show{% endif %}" id="last_name_error">
+                        {{ errors.last_name if errors.last_name else 'وارد کردن این فیلد الزامی است' }}
+                    </div>
+                </div>
+
+                <!-- کد دانش‌آموزی -->
+                <div class="form-group">
+                    <label>کد دانش‌آموزی <span class="required">*</span></label>
+                    <input type="text" name="student_code" id="student_code" value="{{ form_data.student_code }}" placeholder="مثلاً ۱۴۰۴۱۲۳۴۵">
+                    <div class="error-msg {% if errors.student_code %}show{% endif %}" id="student_code_error">
+                        {{ errors.student_code if errors.student_code else 'وارد کردن این فیلد الزامی است' }}
+                    </div>
+                </div>
+
+                <!-- نام پدر -->
+                <div class="form-group">
+                    <label>نام پدر <span class="required">*</span></label>
+                    <input type="text" name="father_name" id="father_name" value="{{ form_data.father_name }}" placeholder="نام پدر را وارد کنید">
+                    <div class="error-msg {% if errors.father_name %}show{% endif %}" id="father_name_error">
+                        {{ errors.father_name if errors.father_name else 'وارد کردن این فیلد الزامی است' }}
+                    </div>
+                </div>
+
+                <!-- پایه -->
+                <div class="form-group">
+                    <label>پایه <span class="required">*</span></label>
+                    <select name="grade" id="grade">
+                        <option value="">-- انتخاب پایه --</option>
+                        <option value="دهم" {% if form_data.grade == 'دهم' %}selected{% endif %}>دهم</option>
+                        <option value="یازدهم" {% if form_data.grade == 'یازدهم' %}selected{% endif %}>یازدهم</option>
+                        <option value="دوازدهم" {% if form_data.grade == 'دوازدهم' %}selected{% endif %}>دوازدهم</option>
+                    </select>
+                    <div class="error-msg {% if errors.grade %}show{% endif %}" id="grade_error">
+                        {{ errors.grade if errors.grade else 'وارد کردن این فیلد الزامی است' }}
+                    </div>
+                </div>
+
+                <!-- رشته -->
+                <div class="form-group">
+                    <label>رشته <span class="required">*</span></label>
+                    <select name="major" id="major">
+                        <option value="">-- انتخاب رشته --</option>
+                        <option value="انسانی" {% if form_data.major == 'انسانی' %}selected{% endif %}>علوم انسانی</option>
+                        <option value="تجربی" {% if form_data.major == 'تجربی' %}selected{% endif %}>علوم تجربی</option>
+                    </select>
+                    <div class="error-msg {% if errors.major %}show{% endif %}" id="major_error">
+                        {{ errors.major if errors.major else 'وارد کردن این فیلد الزامی است' }}
+                    </div>
+                </div>
+
+                <!-- عکس -->
+                <div class="form-group full-width">
+                    <label>عکس دانش‌آموز <span class="required">*</span></label>
+                    <div class="file-upload-wrapper">
+                        <label for="photo-upload" class="custom-file-btn">
+                            <i class="ri-image-add-line"></i> انتخاب فایل
+                        </label>
+                        <input type="file" name="photo" id="photo-upload" accept="image/*">
+                        <span id="file-name">هیچ فایلی انتخاب نشده است</span>
+                    </div>
+                    <div class="error-msg {% if errors.photo %}show{% endif %}" id="photo_error">
+                        {{ errors.photo if errors.photo else 'وارد کردن این فیلد الزامی است' }}
+                    </div>
+                </div>
+
+                <!-- پیش‌نمایش عکس -->
+                <div class="photo-preview-wrapper" id="photoPreviewWrapper">
+                    <img id="photoPreview" src="#" alt="پیش‌نمایش عکس">
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="ri-save-line"></i> ثبت دانش‌آموز
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- مودال لیست دانش‌آموزان -->
+    <div class="modal-overlay" id="studentModal">
+        <div class="modal-content" id="modalContent">
+            <button class="modal-close" onclick="closeStudentModal()">✕</button>
+            <h3>📋 لیست دانش‌آموزان</h3>
+            <div id="studentListContainer">
+                <p style="color:#4a6a85; font-family: sahel, sans-serif;">در حال بارگذاری...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ===== پیش‌نمایش عکس =====
+            const photoInput = document.getElementById('photo-upload');
+            const fileNameSpan = document.getElementById('file-name');
+            const previewWrapper = document.getElementById('photoPreviewWrapper');
+            const previewImg = document.getElementById('photoPreview');
+
+            photoInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    fileNameSpan.textContent = file.name;
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImg.src = e.target.result;
+                        previewWrapper.classList.add('show');
+                    };
+                    reader.readAsDataURL(file);
+                    document.getElementById('photo_error').classList.remove('show');
+                } else {
+                    fileNameSpan.textContent = 'هیچ فایلی انتخاب نشده است';
+                    previewWrapper.classList.remove('show');
+                    previewImg.src = '#';
+                }
+            });
+
+            // ===== محو شدن خطاها =====
+            const fields = ['first_name', 'last_name', 'student_code', 'father_name', 'grade', 'major'];
+            fields.forEach(id => {
+                const input = document.getElementById(id);
+                if (!input) return;
+                const errorEl = document.getElementById(id + '_error');
+                const hideError = function() {
+                    let val = input.value.trim();
+                    if (input.tagName === 'SELECT') val = input.value;
+                    if (val && val !== '') {
+                        if (errorEl) errorEl.classList.remove('show');
+                    }
+                };
+                input.addEventListener('input', hideError);
+                input.addEventListener('change', hideError);
+            });
+
+            // ===== Toast =====
+            {% if success %}
+                const toast = document.getElementById('toast');
+                const progressFill = document.getElementById('progressFill');
+                const msgEl = toast.querySelector('.toast-message');
+                if (msgEl) msgEl.textContent = '✅ {{ success }}';
+                toast.classList.add('show');
+                let width = 0;
+                const interval = setInterval(() => {
+                    width += 2;
+                    progressFill.style.width = width + '%';
+                    if (width >= 100) {
+                        clearInterval(interval);
+                        setTimeout(() => toast.classList.remove('show'), 300);
+                    }
+                }, 40);
+            {% endif %}
+
+            // ===== اعتبارسنجی فرم =====
+            const form = document.getElementById('studentForm');
+            form.addEventListener('submit', function(e) {
+                let isValid = true;
+                const requiredIds = ['first_name', 'last_name', 'student_code', 'father_name', 'grade', 'major'];
+                document.querySelectorAll('.error-msg').forEach(el => el.classList.remove('show'));
+
+                requiredIds.forEach(id => {
+                    const input = document.getElementById(id);
+                    const errorEl = document.getElementById(id + '_error');
+                    let val = input.value.trim();
+                    if (input.tagName === 'SELECT') val = input.value;
+                    if (!val || val === '') {
+                        if (errorEl) {
+                            errorEl.textContent = 'وارد کردن این فیلد الزامی است';
+                            errorEl.classList.add('show');
+                        }
+                        isValid = false;
+                    }
+                });
+
+                const photoInput = document.getElementById('photo-upload');
+                const photoError = document.getElementById('photo_error');
+                if (!photoInput.files || photoInput.files.length === 0) {
+                    if (photoError) {
+                        photoError.textContent = 'وارد کردن این فیلد الزامی است';
+                        photoError.classList.add('show');
+                    }
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    e.preventDefault();
+                    document.getElementById('toast').classList.remove('show');
+                }
+            });
+
+        })();
+
+        // ===== توابع مودال لیست دانش‌آموزان =====
+        function showStudentList() {
+            const modal = document.getElementById('studentModal');
+            const container = document.getElementById('studentListContainer');
+            modal.classList.add('show');
+            container.innerHTML = '<p style="color:#4a6a85; font-family: sahel, sans-serif;">در حال بارگذاری...</p>';
+
+            fetch('/api/students')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.length === 0) {
+                        container.innerHTML = '<p style="color:#4a6a85; font-family: sahel, sans-serif;">هیچ دانش‌آموزی ثبت نشده است.</p>';
+                        return;
+                    }
+                    let html = `
+                        <table class="student-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>عکس</th>
+                                    <th>نام و نام خانوادگی</th>
+                                    <th>کد دانش‌آموزی</th>
+                                    <th>نام پدر</th>
+                                    <th>پایه</th>
+                                    <th>رشته</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    data.forEach((s, i) => {
+                        const photo = s.photo_path ? `<img src="/${s.photo_path}" class="avatar" alt="عکس">` : '<span style="color:#aaa;">—</span>';
+                        html += `
+                            <tr>
+                                <td>${i+1}</td>
+                                <td>${photo}</td>
+                                <td>${s.first_name} ${s.last_name}</td>
+                                <td>${s.student_code}</td>
+                                <td>${s.father_name}</td>
+                                <td>${s.grade}</td>
+                                <td>${s.major}</td>
+                            </tr>
+                        `;
+                    });
+                    html += `</tbody></table>`;
+                    container.innerHTML = html;
+                })
+                .catch(err => {
+                    container.innerHTML = '<p style="color:#d1453b; font-family: sahel, sans-serif;">خطا در بارگذاری اطلاعات</p>';
+                });
+        }
+
+        function closeStudentModal() {
+            document.getElementById('studentModal').classList.remove('show');
+        }
+
+        document.getElementById('studentModal').addEventListener('click', function(e) {
+            if (e.target === this) closeStudentModal();
+        });
+    </script>
+</body>
+</html>

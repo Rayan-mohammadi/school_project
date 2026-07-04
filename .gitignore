@@ -1,0 +1,37 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+instance/
+school.db
+
+# Uploads
+uploads/
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# Environment variables
+.env
+config.py
+secrets.py
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db

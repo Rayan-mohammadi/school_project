@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ثبت نمرات</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/sahel-font@v3.4.0/dist/font-face.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* ===== استایل‌های صفحه نمرات ===== */
+        .grades-page { min-height: 100vh; background: #eef2f7; display: flex; align-items: center; justify-content: center; padding: 30px; }
+        .grades-card { width: 100%; max-width: 1300px; background: rgba(255,255,255,0.78); backdrop-filter: blur(12px); border-radius: 48px; padding: 40px 45px; box-shadow: 0 30px 60px rgba(0,20,30,0.06); border: 1px solid rgba(255,255,255,0.3); }
+        .grades-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; margin-bottom: 30px; }
+        .grades-header h2 { font-size: 2.2rem; font-weight: 700; color: #0b1e2b; }
+        .back-link { color: #1a2b3c; text-decoration: none; font-weight: 500; padding: 10px 24px; border-radius: 40px; background: rgba(255,255,255,0.6); backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.8); transition: 0.25s; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; }
+        .back-link:hover { background: #ffffff; border-color: #b7c9dd; }
+        .filter-section { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 25px; align-items: center; background: rgba(255,255,255,0.3); padding: 18px 22px; border-radius: 30px; }
+        .filter-section select { padding: 12px 22px 12px 45px; border: 1.5px solid #e2e8f0; border-radius: 60px; background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234a6a85' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat left 18px center; background-size: 12px; font-size: 0.95rem; color: #1a2b3c; appearance: none; -webkit-appearance: none; min-width: 150px; cursor: pointer; font-family: sahel, sans-serif; transition: 0.2s; }
+        .filter-section select:focus { border-color: #2b4b6e; box-shadow: 0 0 0 4px rgba(43,75,110,0.06); }
+        .filter-section select:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-apply { padding: 12px 30px; border: none; border-radius: 60px; background: #0b1e2b; color: #fff; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: 0.25s; font-family: sahel, sans-serif; box-shadow: 0 8px 20px rgba(11,30,43,0.12); }
+        .btn-apply:hover { background: #1a3345; transform: translateY(-2px); }
+        .btn-apply:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-save-grades { padding: 12px 30px; border: none; border-radius: 60px; background: #1d8b4e; color: #fff; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: 0.25s; font-family: sahel, sans-serif; box-shadow: 0 8px 20px rgba(29,139,78,0.12); margin-right: 12px; }
+        .btn-save-grades:hover:not(:disabled) { background: #147a40; transform: translateY(-2px); }
+        .btn-save-grades:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+        .table-wrap { overflow-x: auto; border-radius: 24px; border: 1px solid rgba(0,0,0,0.02); }
+        .grades-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: #ffffff; border-radius: 24px; overflow: hidden; font-family: sahel, sans-serif; }
+        .grades-table th { background: #f5f8fc; color: #1a2b3c; padding: 16px 20px; text-align: right; font-weight: 600; border-bottom: 2px solid #e9eef3; white-space: nowrap; }
+        .grades-table td { padding: 16px 20px; border-bottom: 1px solid #f0f4f8; vertical-align: middle; color: #1f3345; }
+        .grades-table tbody tr:hover { background: #f8fafc; }
+        .grades-table input[type="number"] { width: 100px; padding: 8px 12px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; background: #fafcfe; transition: 0.2s; font-family: sahel, sans-serif; color: #1a2b3c; }
+        .grades-table input[type="number"]:focus { border-color: #2b4b6e; box-shadow: 0 0 0 4px rgba(43,75,110,0.06); }
+        .grades-table input[type="number"]:disabled { background: #f0f4f8; cursor: not-allowed; }
+        .grades-table .has-grade { background: #eaf7ed; border-color: #1d8b4e; }
+        .grades-table .grade-edit-btn { background: none; border: none; cursor: pointer; font-size: 1.2rem; color: #4a6a85; padding: 0 8px; transition: 0.2s; }
+        .grades-table .grade-edit-btn:hover { color: #0b1e2b; }
+        .no-data { text-align: center; color: #8aa0b3; padding: 40px; }
+
+        /* Toast موفقیت */
+        #toast-success {
+            position: fixed; top: 30px; right: 30px; background: #ffffff; padding: 16px 28px; border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,20,30,0.2); z-index: 9999; max-width: 400px; min-width: 260px;
+            text-align: center; border-right: 8px solid #1d8b4e; opacity: 0; transform: translateX(80px);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); direction: rtl;
+        }
+        #toast-success.show { opacity: 1; transform: translateX(0); }
+        .toast-message-success { font-size: 1.1rem; font-weight: 600; color: #1a2b3c; margin-bottom: 10px; }
+        .toast-progress { width: 100%; height: 5px; background: #e9eef3; border-radius: 10px; overflow: hidden; }
+        .toast-progress-fill { height: 100%; width: 0%; background: #1d8b4e; border-radius: 10px; transition: width 0.1s linear; }
+
+        @media (max-width: 768px) {
+            .grades-card { padding: 20px 15px; }
+            .filter-section { flex-direction: column; align-items: stretch; }
+            .filter-section select { width: 100%; }
+            .btn-apply, .btn-save-grades { width: 100%; text-align: center; margin: 4px 0; }
+            .grades-table input[type="number"] { width: 70px; }
+            #toast-success { top: 20px; right: 20px; left: 20px; max-width: none; min-width: auto; }
+        }
+    </style>
+</head>
+<body class="grades-page">
+
+    <!-- Toast موفقیت -->
+    <div id="toast-success">
+        <div class="toast-message-success">✅ نمرات با موفقیت ذخیره شدند!</div>
+        <div class="toast-progress">
+            <div class="toast-progress-fill" id="toastProgressFill"></div>
+        </div>
+    </div>
+
+    <div class="grades-card">
+        <div class="grades-header">
+            <h2>📝 ثبت نمرات</h2>
+            <a href="{{ url_for('index') }}" class="back-link"><i class="ri-arrow-right-line"></i> بازگشت</a>
+        </div>
+
+        <div class="filter-section">
+            <select id="gradeSelect" onchange="onGradeChange()">
+                <option value="">انتخاب پایه</option>
+                <option value="دهم">دهم</option>
+                <option value="یازدهم">یازدهم</option>
+                <option value="دوازدهم">دوازدهم</option>
+            </select>
+            <select id="majorSelect" onchange="onMajorChange()" disabled>
+                <option value="">انتخاب رشته</option>
+                <option value="انسانی">علوم انسانی</option>
+                <option value="تجربی">علوم تجربی</option>
+            </select>
+            <select id="lessonSelect" disabled>
+                <option value="">انتخاب درس</option>
+            </select>
+            <button class="btn-apply" id="applyBtn" disabled onclick="applyFilter()">اعمال فیلتر</button>
+            <button class="btn-save-grades" id="saveGradesBtn" disabled onclick="saveGrades()">💾 ثبت نمرات</button>
+        </div>
+
+        <div class="table-wrap">
+            <table class="grades-table" id="gradesTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>نام و نام خانوادگی</th>
+                        <th>کد دانش‌آموزی</th>
+                        <th>نام پدر</th>
+                        <th>نمره</th>
+                    </tr>
+                </thead>
+                <tbody id="gradesTableBody">
+                    <tr><td colspan="5" class="no-data">لطفاً فیلترها را انتخاب کرده و دکمه اعمال را بزنید.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let currentStudents = [];
+        let currentLesson = '';
+        let gradeInputs = {};
+        let existingGrades = {};
+
+        // ===== تغییر پایه =====
+        function onGradeChange() {
+            const grade = document.getElementById('gradeSelect').value;
+            const majorSelect = document.getElementById('majorSelect');
+            const lessonSelect = document.getElementById('lessonSelect');
+            const applyBtn = document.getElementById('applyBtn');
+            const saveBtn = document.getElementById('saveGradesBtn');
+
+            majorSelect.disabled = !grade;
+            lessonSelect.disabled = true;
+            lessonSelect.innerHTML = '<option value="">انتخاب درس</option>';
+            applyBtn.disabled = true;
+            saveBtn.disabled = true;
+
+            if (grade) majorSelect.value = '';
+            document.getElementById('gradesTableBody').innerHTML = 
+                '<tr><td colspan="5" class="no-data">لطفاً رشته را انتخاب کنید.</td></tr>';
+        }
+
+        // ===== تغییر رشته =====
+        function onMajorChange() {
+            const grade = document.getElementById('gradeSelect').value;
+            const major = document.getElementById('majorSelect').value;
+            const lessonSelect = document.getElementById('lessonSelect');
+            const applyBtn = document.getElementById('applyBtn');
+            const saveBtn = document.getElementById('saveGradesBtn');
+
+            if (grade && major) {
+                fetch(`/api/lessons?grade=${encodeURIComponent(grade)}&major=${encodeURIComponent(major)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        lessonSelect.innerHTML = '<option value="">انتخاب درس</option>';
+                        data.forEach(lesson => {
+                            const opt = document.createElement('option');
+                            opt.value = lesson;
+                            opt.textContent = lesson;
+                            lessonSelect.appendChild(opt);
+                        });
+                        lessonSelect.disabled = false;
+                        applyBtn.disabled = false;
+                        saveBtn.disabled = true;
+                    })
+                    .catch(() => {
+                        lessonSelect.innerHTML = '<option value="">خطا</option>';
+                        lessonSelect.disabled = true;
+                        applyBtn.disabled = true;
+                        saveBtn.disabled = true;
+                    });
+            } else {
+                lessonSelect.disabled = true;
+                lessonSelect.innerHTML = '<option value="">انتخاب درس</option>';
+                applyBtn.disabled = true;
+                saveBtn.disabled = true;
+            }
+            document.getElementById('gradesTableBody').innerHTML = 
+                '<tr><td colspan="5" class="no-data">لطفاً درس را انتخاب کنید.</td></tr>';
+        }
+
+        // ===== اعمال فیلتر =====
+        function applyFilter() {
+            const grade = document.getElementById('gradeSelect').value;
+            const major = document.getElementById('majorSelect').value;
+            currentLesson = document.getElementById('lessonSelect').value;
+
+            if (!grade || !major || !currentLesson) {
+                alert('لطفاً تمام فیلترها را تکمیل کنید.');
+                return;
+            }
+
+            fetch(`/api/students_by_grade_major?grade=${encodeURIComponent(grade)}&major=${encodeURIComponent(major)}`)
+                .then(res => res.json())
+                .then(data => {
+                    currentStudents = data;
+                    // دریافت نمرات موجود برای هر دانش‌آموز
+                    return Promise.all(currentStudents.map(s => 
+                        fetch(`/api/get_student_grade/${s.id}/${encodeURIComponent(currentLesson)}`)
+                            .then(res => res.json())
+                            .then(result => {
+                                existingGrades[s.id] = result.score;
+                                return s;
+                            })
+                    ));
+                })
+                .then(() => {
+                    renderTable(currentLesson);
+                    updateSaveButton();
+                })
+                .catch(() => {
+                    document.getElementById('gradesTableBody').innerHTML = 
+                        '<tr><td colspan="5" class="no-data">خطا در بارگذاری دانش‌آموزان</td></tr>';
+                });
+        }
+
+        // ===== رندر جدول =====
+        function renderTable(lesson) {
+            const tbody = document.getElementById('gradesTableBody');
+            if (currentStudents.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="no-data">هیچ دانش‌آموزی یافت نشد.</td></tr>';
+                return;
+            }
+
+            let html = '';
+            currentStudents.forEach((s, i) => {
+                const existing = existingGrades[s.id];
+                const hasGrade = (existing !== null && existing !== undefined && existing !== '');
+                const displayValue = hasGrade ? existing : '';
+                const inputId = `grade_${s.id}`;
+                
+                html += `
+                    <tr>
+                        <td>${i+1}</td>
+                        <td>${s.first_name} ${s.last_name}</td>
+                        <td>${s.student_code}</td>
+                        <td>${s.father_name}</td>
+                        <td>
+                            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                                <input type="number" step="0.25" min="0" max="20" 
+                                       placeholder="نمره" 
+                                       data-student-id="${s.id}" 
+                                       data-lesson="${lesson}" 
+                                       class="grade-input"
+                                       id="${inputId}"
+                                       value="${displayValue}"
+                                       ${hasGrade ? 'disabled' : ''}
+                                       oninput="onGradeInput('${inputId}')">
+                                ${hasGrade ? `<button class="grade-edit-btn" onclick="enableEdit('${inputId}')" title="ویرایش نمره">✏️</button>` : ''}
+                                <span id="status_${inputId}" style="font-size:0.75rem;color:#1d8b4e;display:${hasGrade ? 'inline' : 'none'};">✓ ثبت شده</span>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+            
+            // مقداردهی اولیه برای دکمه ذخیره
+            setTimeout(updateSaveButton, 100);
+        }
+
+        // ===== وقتی کاربر نمره وارد می‌کند =====
+        function onGradeInput(inputId) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            
+            // محدودیت ورودی: فقط اعداد با اعشار مجاز
+            const val = input.value;
+            if (val !== '') {
+                const num = parseFloat(val);
+                if (isNaN(num) || num < 0 || num > 20) {
+                    input.style.borderColor = '#d1453b';
+                } else {
+                    input.style.borderColor = '#1d8b4e';
+                }
+            }
+            updateSaveButton();
+        }
+
+        // ===== فعال کردن ویرایش =====
+        function enableEdit(inputId) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            input.disabled = false;
+            input.focus();
+            // حذف وضعیت "ثبت شده"
+            const statusSpan = document.getElementById(`status_${inputId}`);
+            if (statusSpan) statusSpan.style.display = 'none';
+            // پاک کردن مقدار قبلی برای ویرایش
+            // input.value = ''; // اگر میخوای پاک بشه
+            updateSaveButton();
+        }
+
+        // ===== بررسی وضعیت دکمه ذخیره =====
+        function updateSaveButton() {
+            const inputs = document.querySelectorAll('.grade-input:not([disabled])');
+            let hasValue = false;
+            inputs.forEach(inp => {
+                const val = inp.value.trim();
+                if (val !== '' && !isNaN(parseFloat(val)) && parseFloat(val) >= 0 && parseFloat(val) <= 20) {
+                    hasValue = true;
+                }
+            });
+            const saveBtn = document.getElementById('saveGradesBtn');
+            saveBtn.disabled = !hasValue;
+        }
+
+        // ===== ذخیره نمرات =====
+        function saveGrades() {
+            const inputs = document.querySelectorAll('.grade-input:not([disabled])');
+            let gradesData = [];
+            let hasError = false;
+
+            inputs.forEach(input => {
+                const studentId = parseInt(input.dataset.studentId);
+                const lesson = input.dataset.lesson;
+                let score = input.value.trim();
+                
+                if (score === '') {
+                    // اگر خالی بود، نادیده بگیر
+                    return;
+                }
+                
+                const num = parseFloat(score);
+                if (isNaN(num) || num < 0 || num > 20) {
+                    alert(`نمره وارد شده برای دانش‌آموز با کد ${input.closest('tr').querySelector('td:nth-child(3)').textContent} معتبر نیست.`);
+                    hasError = true;
+                    return;
+                }
+                
+                // بررسی اعشار مجاز
+                const decimal = num % 1;
+                if (decimal !== 0 && decimal !== 0.25 && decimal !== 0.5 && decimal !== 0.75) {
+                    alert(`نمره باید با اعشار ۰، ۰٫۲۵، ۰٫۵ یا ۰٫۷۵ باشد.`);
+                    hasError = true;
+                    return;
+                }
+                
+                gradesData.push({
+                    student_id: studentId,
+                    lesson: lesson,
+                    score: num
+                });
+            });
+
+            if (hasError || gradesData.length === 0) return;
+
+            fetch('/api/save_grades', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ grades: gradesData })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showToastSuccess();
+                    // غیرفعال کردن ورودی‌ها و نمایش وضعیت
+                    inputs.forEach(input => {
+                        input.disabled = true;
+                        const inputId = input.id;
+                        const statusSpan = document.getElementById(`status_${inputId}`);
+                        if (statusSpan) statusSpan.style.display = 'inline';
+                        // حذف دکمه ویرایش اگر وجود نداشت
+                        const parentDiv = input.closest('div');
+                        if (!parentDiv.querySelector('.grade-edit-btn')) {
+                            const editBtn = document.createElement('button');
+                            editBtn.className = 'grade-edit-btn';
+                            editBtn.innerHTML = '✏️';
+                            editBtn.onclick = () => enableEdit(inputId);
+                            editBtn.title = 'ویرایش نمره';
+                            parentDiv.appendChild(editBtn);
+                        }
+                    });
+                    updateSaveButton();
+                } else {
+                    alert('خطا در ذخیره نمرات: ' + data.message);
+                }
+            })
+            .catch(err => {
+                alert('خطا در ارتباط با سرور');
+            });
+        }
+
+        // ===== نمایش Toast موفقیت =====
+        function showToastSuccess() {
+            const toast = document.getElementById('toast-success');
+            const progressFill = document.getElementById('toastProgressFill');
+            toast.classList.add('show');
+            let width = 0;
+            const interval = setInterval(() => {
+                width += 2;
+                progressFill.style.width = width + '%';
+                if (width >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                        progressFill.style.width = '0%';
+                    }, 300);
+                }
+            }, 40);
+        }
+    </script>
+</body>
+</html>

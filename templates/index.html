@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سامانه مدرسه</title>
+    
+    <!-- فونت Sahel -->
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/sahel-font@v3.4.0/dist/font-face.css" rel="stylesheet" type="text/css" />
+    
+    <!-- کتابخانه آیکون Remix Icon (آیکون‌های رسمی و شیک) -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet" />
+    
+    <style>
+        /* ===== تنظیمات عمومی ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: sahel, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #eef2f7 0%, #d9e2ec 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            direction: rtl;
+        }
+
+        /* ===== کانتینر اصلی ===== */
+        .index-container {
+            width: 100%;
+            max-width: 1200px;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== هدر ===== */
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 30px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .main-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0b1e2b;
+            letter-spacing: -0.5px;
+        }
+
+        .main-header h1 .school-icon {
+            color: #1a2b3c;
+            opacity: 0.7;
+        }
+
+        .main-header .year-badge {
+            color: #4a6a85;
+            font-size: 0.95rem;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 8px 22px;
+            border-radius: 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* ===== شبکه کارت‌ها ===== */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            flex: 1;
+            align-content: center;
+            padding-bottom: 20px;
+        }
+
+        /* ===== کارت‌ها ===== */
+        .card-item {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 40px;
+            box-shadow: 0 20px 40px -12px rgba(0, 20, 30, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            color: #0b1e2b;
+            transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            aspect-ratio: 1 / 1;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+            padding: 30px 20px;
+        }
+
+        .card-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .card-item:hover {
+            transform: translateY(-12px) scale(1.01);
+            box-shadow: 0 35px 60px -15px rgba(0, 30, 50, 0.15);
+            border-color: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        /* ===== آیکون‌ها (رسمی و سیاه) ===== */
+        .card-item .icon {
+            font-size: 4.5rem;
+            line-height: 1;
+            margin-bottom: 18px;
+            color: #1a2b3c;
+            opacity: 0.8;
+            transition: 0.2s;
+        }
+
+        .card-item:hover .icon {
+            opacity: 1;
+            transform: scale(1.02);
+        }
+
+        .card-item .icon i {
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* ===== عنوان و زیرنویس ===== */
+        .card-item .title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0b1e2b;
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+        }
+
+        .card-item .sub {
+            font-size: 1rem;
+            color: #4d6a85;
+            font-weight: 400;
+            opacity: 0.75;
+        }
+
+        /* ===== رنگ‌بندی ملایم و یکدست برای کارت‌ها ===== */
+        .card-item:nth-child(1) { background: rgba(255, 255, 255, 0.88); }
+        .card-item:nth-child(2) { background: rgba(255, 255, 255, 0.85); }
+        .card-item:nth-child(3) { background: rgba(255, 255, 255, 0.82); }
+
+        /* ===== واکنش‌گرایی ===== */
+        @media (max-width: 992px) {
+            .cards-grid {
+                gap: 20px;
+            }
+            .card-item .icon {
+                font-size: 3.8rem;
+            }
+            .card-item .title {
+                font-size: 1.7rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+                height: auto;
+            }
+            .card-item {
+                aspect-ratio: auto;
+                padding: 28px 20px;
+                min-height: 140px;
+            }
+            .main-header {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+                padding: 16px 20px;
+            }
+            .main-header h1 {
+                font-size: 1.6rem;
+            }
+            .card-item .icon {
+                font-size: 3.2rem;
+                margin-bottom: 10px;
+            }
+            .card-item .title {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            .index-container {
+                height: auto;
+                min-height: 90vh;
+            }
+            .card-item .icon {
+                font-size: 2.8rem;
+            }
+            .card-item .title {
+                font-size: 1.3rem;
+            }
+            .card-item .sub {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="index-container">
+        <!-- ===== هدر ===== -->
+        <header class="main-header">
+            <h1>
+                <span class="school-icon">🏛</span> 
+                دبیرستان علامه
+            </h1>
+            <span class="year-badge">سال تحصیلی ۱۴۰۵-۱۴۰۴</span>
+        </header>
+
+        <!-- ===== کارت‌ها ===== -->
+        <div class="cards-grid">
+            
+            <!-- کارت ۱: ثبت دانش‌آموز -->
+            <a href="{{ url_for('register') }}" class="card-item">
+                <span class="icon">
+                    <i class="ri-user-add-line"></i>
+                </span>
+                <span class="title">ثبت دانش‌آموز</span>
+                <span class="sub">افزودن دانش‌آموز جدید</span>
+            </a>
+
+            <!-- کارت ۲: ثبت نمرات -->
+            <a href="{{ url_for('grades') }}" class="card-item">
+                <span class="icon">
+                    <i class="ri-pencil-line"></i>
+                </span>
+                <span class="title">ثبت نمرات</span>
+                <span class="sub">ثبت نمرات دروس</span>
+            </a>
+
+            <!-- کارت ۳: کارنامه -->
+            <a href="{{ url_for('report') }}" class="card-item">
+                <span class="icon">
+                    <i class="ri-file-chart-line"></i>
+                </span>
+                <span class="title">کارنامه</span>
+                <span class="sub">چاپ و مشاهده کارنامه</span>
+            </a>
+
+        </div>
+    </div>
+
+</body>
+</html>

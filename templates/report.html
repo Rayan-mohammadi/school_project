@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کارنامه</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/sahel-font@v3.4.0/dist/font-face.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet" />
+    <style>
+        /* ===== تنظیمات عمومی ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: sahel, sans-serif;
+        }
+
+        .report-page {
+            min-height: 100vh;
+            background: #eef2f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+        }
+
+        .report-card {
+            width: 100%;
+            max-width: 1300px;
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(12px);
+            border-radius: 48px;
+            padding: 40px 45px;
+            box-shadow: 0 30px 60px rgba(0, 20, 30, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .report-header h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #0b1e2b;
+        }
+
+        .back-link {
+            color: #1a2b3c;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 24px;
+            border-radius: 40px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            transition: 0.25s;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-link:hover {
+            background: #ffffff;
+            border-color: #b7c9dd;
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 20px 14px 50px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 60px;
+            font-size: 0.95rem;
+            background: #ffffff;
+            transition: 0.25s;
+            outline: none;
+            color: #1a2b3c;
+            font-family: sahel, sans-serif;
+        }
+
+        .search-box input:focus {
+            border-color: #2b4b6e;
+            box-shadow: 0 0 0 4px rgba(43, 75, 110, 0.06);
+        }
+
+        .search-box .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8aa0b3;
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .filter-group select {
+            padding: 13px 22px 13px 45px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 60px;
+            background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234a6a85' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat left 18px center;
+            background-size: 12px;
+            font-size: 0.95rem;
+            color: #1a2b3c;
+            appearance: none;
+            -webkit-appearance: none;
+            min-width: 140px;
+            cursor: pointer;
+            font-family: sahel, sans-serif;
+            transition: 0.2s;
+        }
+
+        .filter-group select:focus {
+            border-color: #2b4b6e;
+            box-shadow: 0 0 0 4px rgba(43, 75, 110, 0.06);
+        }
+
+        .actions-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 28px;
+            padding: 6px 0;
+        }
+
+        .master-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 6px 16px 6px 12px;
+            border-radius: 40px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .master-checkbox label {
+            font-size: 0.9rem;
+            color: #4d6a85;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .master-checkbox input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: #0b1e2b;
+            border-radius: 6px;
+        }
+
+        .btn {
+            padding: 12px 32px;
+            border: none;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: sahel, sans-serif;
+            background: #ffffff;
+            color: #1a2b3c;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .btn-success {
+            background: #0b1e2b;
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(11, 30, 43, 0.12);
+        }
+
+        .btn-success:hover {
+            background: #1a3345;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(11, 30, 43, 0.18);
+        }
+
+        .selected-count {
+            color: #4d6a85;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-right: 8px;
+        }
+
+        .btn .icon {
+            font-size: 1.2rem;
+            line-height: 1;
+            color: #1a2b3c;
+            opacity: 0.7;
+        }
+
+        .btn-success .icon {
+            color: #fff;
+            opacity: 0.9;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: 24px;
+            border: 1px solid rgba(0, 0, 0, 0.02);
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            background: #ffffff;
+            border-radius: 24px;
+            overflow: hidden;
+            font-family: sahel, sans-serif;
+        }
+
+        .report-table th {
+            background: #f5f8fc;
+            color: #1a2b3c;
+            padding: 16px 20px;
+            text-align: right;
+            font-weight: 600;
+            border-bottom: 2px solid #e9eef3;
+            white-space: nowrap;
+        }
+
+        .report-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f0f4f8;
+            vertical-align: middle;
+            color: #1f3345;
+        }
+
+        .report-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .report-table .checkbox-cell {
+            width: 44px;
+            text-align: center;
+        }
+
+        .report-table .checkbox-cell input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #0b1e2b;
+            border-radius: 6px;
+        }
+
+        /* ============================================================ */
+        /* ===== استایل چاپ کارنامه (فقط یک صفحه) ===== */
+        /* ============================================================ */
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printArea,
+            #printArea * {
+                visibility: visible;
+            }
+            #printArea {
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 100%;
+                padding: 8px 10px !important;
+                direction: rtl;
+            }
+            .page-break {
+                page-break-after: always;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-report-container {
+                display: block !important;
+            }
+            /* جلوگیری از سرریز */
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                overflow: hidden;
+            }
+        }
+
+        .print-report-container {
+            display: none;
+            direction: rtl;
+            font-family: sahel, sans-serif;
+            width: 100%;
+            padding: 3px 5px;
+        }
+
+        /* ===== ردیف کارنامه‌ها ===== */
+        .print-row {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 5px;
+            width: 100%;
+        }
+
+        /* ===== کارت کارنامه (فشرده برای جا شدن در یک صفحه) ===== */
+        .print-card {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 6px 10px 6px 10px !important;
+            width: 44%;
+            max-width: 44%;
+            display: inline-block;
+            vertical-align: top;
+            box-sizing: border-box;
+            font-size: 9px !important;
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+            flex-shrink: 0;
+            height: auto;
+            max-height: 340px !important;
+            overflow: hidden;
+            page-break-inside: avoid !important;
+        }
+
+        .print-card .header {
+            text-align: center;
+            border-bottom: 1.5px solid #0b1e2b;
+            padding-bottom: 2px;
+            margin-bottom: 3px;
+        }
+
+        .print-card .header h3 {
+            margin: 0;
+            font-size: 0.8rem !important;
+            color: #0b1e2b;
+        }
+
+        .print-card .header p {
+            margin: 1px 0 0;
+            color: #4d6a85;
+            font-size: 0.45rem !important;
+        }
+
+        /* ===== اطلاعات دانش‌آموز ===== */
+        .print-card .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px 8px;
+            background: #f5f8fc;
+            padding: 3px 6px !important;
+            border-radius: 6px;
+            margin-bottom: 3px;
+            font-size: 0.6rem !important;
+        }
+
+        .print-card .info-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed #e2e8f0;
+            padding: 1px 0;
+        }
+
+        .print-card .info-item .label {
+            font-weight: 600;
+            color: #1a2b3c;
+            font-size: 0.55rem !important;
+        }
+
+        .print-card .info-item .value {
+            color: #0b1e2b;
+            font-size: 0.55rem !important;
+        }
+
+        /* ===== جدول نمرات (کوچک‌ترین سایز ممکن) ===== */
+        .print-card .grade-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.5rem !important;
+            margin: 2px 0;
+        }
+
+        .print-card .grade-table th {
+            background: #f0f4f8;
+            padding: 2px 4px !important;
+            border: 1px solid #e2e8f0;
+            text-align: right;
+            font-weight: 600;
+            font-size: 0.5rem !important;
+        }
+
+        .print-card .grade-table td {
+            padding: 2px 4px !important;
+            border: 1px solid #e2e8f0;
+            text-align: right;
+            font-size: 0.5rem !important;
+        }
+
+        /* ===== معدل و رتبه ===== */
+        .print-card .stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2px;
+            font-size: 0.6rem !important;
+        }
+
+        .print-card .stats .average {
+            font-weight: 700;
+            color: #0b1e2b;
+            font-size: 0.65rem !important;
+        }
+
+        .print-card .stats .rank-badge {
+            display: inline-block;
+            background: #0b1e2b;
+            color: #fff;
+            padding: 1px 8px !important;
+            border-radius: 30px;
+            font-size: 0.55rem !important;
+            font-weight: 600;
+        }
+
+        /* ===== بخش امضا ===== */
+        .print-card .footer-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3px;
+            padding-top: 3px;
+            border-top: 1px solid #e9eef3;
+            padding-left: 15px !important;
+            padding-right: 15px !important;
+        }
+
+        .print-card .footer-section .sign-box-left {
+            text-align: center;
+            order: 2;
+        }
+
+        .print-card .footer-section .sign-box-right {
+            text-align: center;
+            order: 1;
+        }
+
+        .print-card .footer-section .sign-box-right .title,
+        .print-card .footer-section .sign-box-left .title {
+            font-weight: 600;
+            color: #1a2b3c;
+            font-size: 0.55rem !important;
+            display: block;
+            margin-bottom: 1px;
+        }
+
+        .print-card .footer-section .sign-box-right .name,
+        .print-card .footer-section .sign-box-left .name {
+            font-weight: 700;
+            color: #0b1e2b;
+            font-size: 0.6rem !important;
+            display: block;
+        }
+
+        .print-card .footer-section .sign-box-right .sign-line,
+        .print-card .footer-section .sign-box-left .sign-line {
+            border-bottom: 1.5px solid #1a2b3c;
+            width: 50px;
+            margin: 2px auto 1px;
+        }
+
+        .print-card .footer-section .sign-box-right .sign-label,
+        .print-card .footer-section .sign-box-left .sign-label {
+            font-size: 0.45rem !important;
+            color: #4d6a85;
+            display: block;
+            margin-top: 3px;
+        }
+
+        /* ===== تنظیمات نهایی چاپ ===== */
+        @media print {
+            .print-row {
+                gap: 20px !important;
+                margin-bottom: 3px;
+            }
+
+            .print-card {
+                width: 44% !important;
+                max-width: 44% !important;
+                padding: 4px 8px 4px 8px !important;
+                font-size: 8px !important;
+                max-height: 320px !important;
+            }
+
+            .print-card .info-grid {
+                font-size: 0.55rem !important;
+                padding: 2px 5px !important;
+            }
+
+            .print-card .info-item .label,
+            .print-card .info-item .value {
+                font-size: 0.5rem !important;
+            }
+
+            .print-card .grade-table {
+                font-size: 0.45rem !important;
+            }
+
+            .print-card .grade-table th,
+            .print-card .grade-table td {
+                padding: 1px 3px !important;
+                font-size: 0.45rem !important;
+            }
+
+            .print-card .header h3 {
+                font-size: 0.7rem !important;
+            }
+
+            .print-card .header p {
+                font-size: 0.4rem !important;
+            }
+
+            .print-card .stats {
+                font-size: 0.55rem !important;
+            }
+
+            .print-card .stats .average {
+                font-size: 0.6rem !important;
+            }
+
+            .print-card .stats .rank-badge {
+                font-size: 0.5rem !important;
+                padding: 1px 6px !important;
+            }
+
+            .print-card .footer-section {
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+                margin-top: 2px;
+                padding-top: 2px;
+            }
+
+            .print-card .footer-section .sign-box-right .title,
+            .print-card .footer-section .sign-box-left .title {
+                font-size: 0.5rem !important;
+            }
+
+            .print-card .footer-section .sign-box-right .name,
+            .print-card .footer-section .sign-box-left .name {
+                font-size: 0.55rem !important;
+            }
+
+            .print-card .footer-section .sign-box-right .sign-line,
+            .print-card .footer-section .sign-box-left .sign-line {
+                width: 40px;
+                margin: 1px auto;
+            }
+
+            .print-card .footer-section .sign-box-right .sign-label,
+            .print-card .footer-section .sign-box-left .sign-label {
+                font-size: 0.4rem !important;
+                margin-top: 2px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .print-card {
+                width: 100%;
+                max-width: 100%;
+            }
+            .print-row {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            .report-card {
+                padding: 20px 15px;
+            }
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .filter-group {
+                flex-wrap: wrap;
+            }
+            .filter-group select {
+                flex: 1;
+                min-width: 120px;
+            }
+            .actions-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn {
+                justify-content: center;
+            }
+            .master-checkbox {
+                justify-content: center;
+            }
+        }
+        /* ===== ردیف کارنامه‌ها با فاصله مناسب ===== */
+.print-row {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+/* ===== کارت کارنامه (پهن و مرتب) ===== */
+.print-card {
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 12px 16px;
+    width: 46%;
+    max-width: 46%;
+    display: inline-block;
+    vertical-align: top;
+    box-sizing: border-box;
+    font-size: 10.5px;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    flex-shrink: 0;
+    height: auto;
+    max-height: 420px;
+    overflow: hidden;
+    page-break-inside: avoid;
+}
+
+.print-card .header {
+    text-align: center;
+    border-bottom: 2px solid #0b1e2b;
+    padding-bottom: 4px;
+    margin-bottom: 6px;
+}
+
+.print-card .header h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: #0b1e2b;
+}
+
+.print-card .header p {
+    margin: 2px 0 0;
+    color: #4d6a85;
+    font-size: 0.6rem;
+}
+
+/* ===== اطلاعات دانش‌آموز ===== */
+.print-card .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 12px;
+    background: #f5f8fc;
+    padding: 5px 10px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    font-size: 0.75rem;
+}
+
+.print-card .info-item {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px dashed #e2e8f0;
+    padding: 2px 0;
+}
+
+.print-card .info-item .label {
+    font-weight: 600;
+    color: #1a2b3c;
+}
+
+.print-card .info-item .value {
+    color: #0b1e2b;
+}
+
+/* ===== جدول نمرات (خوانا و مرتب) ===== */
+.print-card .grade-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.7rem;
+    margin: 4px 0;
+}
+
+.print-card .grade-table th {
+    background: #f0f4f8;
+    padding: 4px 8px;
+    border: 1px solid #e2e8f0;
+    text-align: right;
+    font-weight: 600;
+    font-size: 0.7rem;
+}
+
+.print-card .grade-table td {
+    padding: 4px 8px;
+    border: 1px solid #e2e8f0;
+    text-align: right;
+    font-size: 0.7rem;
+}
+
+/* ===== معدل و رتبه (بزرگ و خوانا) ===== */
+.print-card .stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+    font-size: 0.8rem;
+}
+
+.print-card .stats .average {
+    font-weight: 700;
+    color: #0b1e2b;
+    font-size: 0.85rem;
+}
+
+.print-card .stats .rank-badge {
+    display: inline-block;
+    background: #0b1e2b;
+    color: #fff;
+    padding: 3px 12px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* ===== بخش امضا (مدیر چپ، مسئول راست) ===== */
+.print-card .footer-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid #e9eef3;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.print-card .footer-section .sign-box-left {
+    text-align: center;
+    order: 2;
+}
+
+.print-card .footer-section .sign-box-right {
+    text-align: center;
+    order: 1;
+}
+
+.print-card .footer-section .sign-box-right .title,
+.print-card .footer-section .sign-box-left .title {
+    font-weight: 600;
+    color: #1a2b3c;
+    font-size: 0.7rem;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.print-card .footer-section .sign-box-right .name,
+.print-card .footer-section .sign-box-left .name {
+    font-weight: 700;
+    color: #0b1e2b;
+    font-size: 0.8rem;
+    display: block;
+}
+
+.print-card .footer-section .sign-box-right .sign-line,
+.print-card .footer-section .sign-box-left .sign-line {
+    border-bottom: 2px solid #1a2b3c;
+    width: 70px;
+    margin: 3px auto 2px;
+}
+
+.print-card .footer-section .sign-box-right .sign-label,
+.print-card .footer-section .sign-box-left .sign-label {
+    font-size: 0.55rem;
+    color: #4d6a85;
+    display: block;
+    margin-top: 8px;
+}
+
+/* ===== تنظیمات چاپ برای صفحه A4 ===== */
+@media print {
+    .print-row {
+        gap: 25px;
+    }
+
+    .print-card {
+        width: 46%;
+        max-width: 46%;
+        padding: 10px 14px;
+        font-size: 9.5px;
+        max-height: 400px;
+    }
+
+    .print-card .info-grid {
+        font-size: 0.7rem;
+        padding: 4px 8px;
+    }
+
+    .print-card .grade-table {
+        font-size: 0.65rem;
+    }
+
+    .print-card .grade-table th,
+    .print-card .grade-table td {
+        padding: 3px 6px;
+        font-size: 0.65rem;
+    }
+
+    .print-card .header h3 {
+        font-size: 0.9rem;
+    }
+
+    .print-card .header p {
+        font-size: 0.55rem;
+    }
+
+    .print-card .stats {
+        font-size: 0.75rem;
+    }
+
+    .print-card .stats .average {
+        font-size: 0.8rem;
+    }
+
+    .print-card .stats .rank-badge {
+        font-size: 0.7rem;
+        padding: 2px 10px;
+    }
+
+    .print-card .footer-section {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .print-card .footer-section .sign-box-right .name,
+    .print-card .footer-section .sign-box-left .name {
+        font-size: 0.75rem;
+    }
+
+    .print-card .footer-section .sign-box-right .title,
+    .print-card .footer-section .sign-box-left .title {
+        font-size: 0.65rem;
+    }
+
+    .print-card .footer-section .sign-box-right .sign-line,
+    .print-card .footer-section .sign-box-left .sign-line {
+        width: 60px;
+    }
+
+    .print-card .footer-section .sign-box-right .sign-label,
+    .print-card .footer-section .sign-box-left .sign-label {
+        font-size: 0.5rem;
+        margin-top: 6px;
+    }
+}
+    </style>
+</head>
+<body class="report-page">
+
+    <div class="report-card no-print">
+        <div class="report-header">
+            <h2>📊 کارنامه <span>مدیریت و چاپ</span></h2>
+            <a href="{{ url_for('index') }}" class="back-link"><i class="ri-arrow-right-line"></i> بازگشت</a>
+        </div>
+
+        <div class="toolbar">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="جستجو بر اساس نام یا کد...">
+                <span class="search-icon">🔍</span>
+            </div>
+            <div class="filter-group">
+                <select id="gradeFilter">
+                    <option value="">همه پایه‌ها</option>
+                    <option value="دهم">دهم</option>
+                    <option value="یازدهم">یازدهم</option>
+                    <option value="دوازدهم">دوازدهم</option>
+                </select>
+                <select id="majorFilter">
+                    <option value="">همه رشته‌ها</option>
+                    <option value="انسانی">علوم انسانی</option>
+                    <option value="تجربی">علوم تجربی</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="actions-bar">
+            <div class="master-checkbox">
+                <input type="checkbox" id="selectAllCheckbox" onchange="toggleAllCheckboxes(this)">
+                <label for="selectAllCheckbox">انتخاب همه</label>
+            </div>
+            <button class="btn btn-success" onclick="printSelected()">
+                <span class="icon">🖨</span> چاپ کارنامه‌های انتخاب شده
+            </button>
+            <span class="selected-count" id="selectedCount">۰ دانش‌آموز انتخاب شده</span>
+        </div>
+
+        <div class="table-wrap">
+            <table class="report-table" id="reportTable">
+                <thead>
+                    <tr>
+                        <th class="checkbox-cell"></th>
+                        <th>#</th>
+                        <th>نام و نام خانوادگی</th>
+                        <th>کد دانش‌آموزی</th>
+                        <th>نام پدر</th>
+                        <th>پایه</th>
+                        <th>رشته</th>
+                    </tr>
+                </thead>
+                <tbody id="reportTableBody">
+                    <tr><td colspan="7" style="text-align:center;color:#8aa0b3;padding:40px;">در حال بارگذاری...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="printArea" style="display:none;"></div>
+
+    <script>
+        // ===== تبدیل اعداد به فارسی =====
+        function toPersianNumber(num) {
+            if (num === null || num === undefined || num === '') return '—';
+            const persianDigits = '۰۱۲۳۴۵۶۷۸۹';
+            const str = String(num);
+            return str.replace(/\d/g, function(d) {
+                return persianDigits[parseInt(d)];
+            });
+        }
+
+        // ===== دیکشنری دروس =====
+        const LESSONS_DATA = {
+            'دهم': {
+                'انسانی': [
+                    'فارسی (1)', 'نگارش (1)', 'دین و زندگی (1)', 'زبان انگلیسی (1)',
+                    'عربی، زبان قرآن (1)', 'آمادگی دفاعی', 'تفکر و سواد رسانه‌ای',
+                    'ریاضی و آمار (1)', 'علوم و فنون ادبی (1)', 'اقتصاد',
+                    'تاریخ (1) - ایران و جهان باستان', 'جغرافیای ایران', 'جامعه‌شناسی (1)'
+                ],
+                'تجربی': [
+                    'فارسی (1)', 'نگارش (1)', 'دین و زندگی (1)', 'زبان انگلیسی (1)',
+                    'عربی، زبان قرآن (1)', 'آمادگی دفاعی', 'تفکر و سواد رسانه‌ای',
+                    'زیست‌شناسی (1)', 'ریاضی (1)', 'شیمی (1)', 'فیزیک (1)',
+                    'آزمایشگاه علوم تجربی (1)'
+                ]
+            },
+            'یازدهم': {
+                'انسانی': [
+                    'فارسی (2)', 'نگارش (2)', 'دین و زندگی (2)', 'زبان انگلیسی (2)',
+                    'عربی، زبان قرآن (2)', 'تاریخ معاصر ایران', 'ریاضی و آمار (2)',
+                    'علوم و فنون ادبی (2)', 'تاریخ (2)', 'جغرافیا (2)',
+                    'جامعه‌شناسی (2)', 'فلسفه (1)', 'روان‌شناسی'
+                ],
+                'تجربی': [
+                    'فارسی (2)', 'نگارش (2)', 'دین و زندگی (2)', 'زبان انگلیسی (2)',
+                    'عربی، زبان قرآن (2)', 'تاریخ معاصر ایران', 'زیست‌شناسی (2)',
+                    'ریاضی (2)', 'شیمی (2)', 'فیزیک (2)', 'زمین‌شناسی'
+                ]
+            },
+            'دوازدهم': {
+                'انسانی': [
+                    'فارسی (3)', 'نگارش (3)', 'دین و زندگی (3)', 'زبان انگلیسی (3)',
+                    'عربی، زبان قرآن (3)', 'ریاضی و آمار (3)', 'علوم و فنون ادبی (3)',
+                    'تاریخ (3) - ایران و جهان معاصر', 'جغرافیا (3) (کاربردی)',
+                    'جامعه‌شناسی (3)', 'فلسفه (2)'
+                ],
+                'تجربی': [
+                    'فارسی (3)', 'نگارش (3)', 'دین و زندگی (3)', 'زبان انگلیسی (3)',
+                    'عربی، زبان قرآن (3)', 'زیست‌شناسی (3)', 'ریاضی (3)',
+                    'شیمی (3)', 'فیزیک (3)'
+                ]
+            }
+        };
+
+        let studentsData = [];
+        let selectedIds = new Set();
+        let allGradesData = {};
+
+        // ===== تبدیل عدد به حروف =====
+        function numberToPersianWords(num) {
+            if (num === null || num === undefined || num === '') return '—';
+            const units = ['', 'یک', 'دو', 'سه', 'چهار', 'پنج', 'شش', 'هفت', 'هشت', 'نه'];
+            const tens = ['', 'ده', 'بیست', 'سی', 'چهل', 'پنجاه', 'شصت', 'هفتاد', 'هشتاد', 'نود'];
+            const teens = ['ده', 'یازده', 'دوازده', 'سیزده', 'چهارده', 'پانزده', 'شانزده', 'هفده', 'هجده', 'نوزده'];
+            num = parseFloat(num);
+            if (isNaN(num) || num < 0 || num > 20) return toPersianNumber(num);
+            const integerPart = Math.floor(num);
+            const decimalPart = Math.round((num - integerPart) * 100);
+            let result = '';
+            if (integerPart === 0) result = 'صفر';
+            else if (integerPart < 10) result = units[integerPart];
+            else if (integerPart < 20) result = teens[integerPart - 10];
+            else {
+                const ten = Math.floor(integerPart / 10);
+                const unit = integerPart % 10;
+                result = tens[ten];
+                if (unit > 0) result += ' و ' + units[unit];
+            }
+            if (decimalPart > 0) {
+                if (decimalPart === 25) result += ' و بیست و پنج صدم';
+                else if (decimalPart === 50) result += ' و نیم';
+                else if (decimalPart === 75) result += ' و هفتاد و پنج صدم';
+            }
+            return result;
+        }
+
+        // ===== بارگذاری دانش‌آموزان =====
+        function loadStudents() {
+            const grade = document.getElementById('gradeFilter').value;
+            const major = document.getElementById('majorFilter').value;
+            const search = document.getElementById('searchInput').value.trim();
+            const params = new URLSearchParams();
+            if (grade) params.append('grade', grade);
+            if (major) params.append('major', major);
+            if (search) params.append('search', search);
+            fetch('/api/students?' + params.toString())
+                .then(res => res.json())
+                .then(data => {
+                    studentsData = data;
+                    selectedIds.clear();
+                    renderTable();
+                    if (grade && major) loadAllGrades(grade, major);
+                    else allGradesData = {};
+                })
+                .catch(() => {
+                    document.getElementById('reportTableBody').innerHTML =
+                        '<tr><td colspan="7" style="text-align:center;color:#d1453b;padding:40px;">خطا در بارگذاری اطلاعات</td></tr>';
+                });
+        }
+
+        function loadAllGrades(grade, major) {
+            fetch(`/api/get_all_grades?grade=${encodeURIComponent(grade)}&major=${encodeURIComponent(major)}`)
+                .then(res => res.json())
+                .then(data => {
+                    allGradesData = {};
+                    data.forEach(item => {
+                        allGradesData[item.student.id] = {
+                            grades: item.grades,
+                            student: item.student
+                        };
+                    });
+                })
+                .catch(() => {});
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('reportTableBody');
+            if (studentsData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#8aa0b3;padding:40px;">هیچ دانش‌آموزی یافت نشد</td></tr>';
+                updateSelectedCount();
+                return;
+            }
+            let html = '';
+            studentsData.forEach((s, i) => {
+                const checked = selectedIds.has(s.id) ? 'checked' : '';
+                html += `
+                    <tr>
+                        <td class="checkbox-cell">
+                            <input type="checkbox" class="student-checkbox" data-id="${s.id}" ${checked} onchange="toggleStudent(${s.id})">
+                        </td>
+                        <td>${toPersianNumber(i+1)}</td>
+                        <td>${s.first_name} ${s.last_name}</td>
+                        <td>${toPersianNumber(s.student_code)}</td>
+                        <td>${s.father_name}</td>
+                        <td>${s.grade}</td>
+                        <td>${s.major}</td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+            updateSelectedCount();
+            updateSelectAllCheckbox();
+        }
+
+        function toggleStudent(id) {
+            if (selectedIds.has(id)) selectedIds.delete(id);
+            else selectedIds.add(id);
+            updateSelectedCount();
+            updateSelectAllCheckbox();
+        }
+
+        function toggleAllCheckboxes(master) {
+            if (master.checked) studentsData.forEach(s => selectedIds.add(s.id));
+            else selectedIds.clear();
+            renderTable();
+        }
+
+        function updateSelectAllCheckbox() {
+            const master = document.getElementById('selectAllCheckbox');
+            if (studentsData.length === 0) {
+                master.checked = false;
+                master.indeterminate = false;
+                return;
+            }
+            const allSelected = studentsData.every(s => selectedIds.has(s.id));
+            const someSelected = studentsData.some(s => selectedIds.has(s.id));
+            master.checked = allSelected;
+            master.indeterminate = !allSelected && someSelected;
+        }
+
+        function updateSelectedCount() {
+            document.getElementById('selectedCount').textContent =
+                `${toPersianNumber(selectedIds.size)} دانش‌آموز انتخاب شده`;
+        }
+
+        function calculateAverage(grades, allLessons) {
+            if (!allLessons || allLessons.length === 0) return 0;
+            let sum = 0;
+            allLessons.forEach(lesson => {
+                const score = grades[lesson];
+                if (score !== null && score !== undefined && score !== '') sum += parseFloat(score);
+            });
+            return allLessons.length > 0 ? (sum / allLessons.length) : 0;
+        }
+
+        function calculateRank(studentId, allStudents, allLessons) {
+            const currentAvg = calculateAverage(allGradesData[studentId]?.grades || {}, allLessons);
+            let rank = 1;
+            for (let id in allGradesData) {
+                if (parseInt(id) === studentId) continue;
+                const otherAvg = calculateAverage(allGradesData[id]?.grades || {}, allLessons);
+                if (otherAvg > currentAvg) rank++;
+            }
+            return rank;
+        }
+
+        function printSelected() {
+            if (selectedIds.size === 0) {
+                alert('لطفاً حداقل یک دانش‌آموز را انتخاب کنید.');
+                return;
+            }
+            const selectedStudents = studentsData.filter(s => selectedIds.has(s.id));
+            let fetchPromises = selectedStudents.map(s => {
+                return fetch(`/api/get_grades/${s.id}`)
+                    .then(res => res.json())
+                    .then(grades => ({ student: s, grades: grades }));
+            });
+            Promise.all(fetchPromises)
+                .then(results => {
+                    results.forEach(item => {
+                        const gradesObj = {};
+                        item.grades.forEach(g => { gradesObj[g.lesson] = g.score; });
+                        allGradesData[item.student.id] = {
+                            grades: gradesObj,
+                            student: item.student
+                        };
+                    });
+                    generatePrintContent(selectedStudents);
+                })
+                .catch(() => generatePrintContent(selectedStudents));
+        }
+
+        function generatePrintContent(students) {
+            let printHtml = `
+                <div class="print-report-container" style="display:block; direction:rtl; font-family: sahel, sans-serif; padding:3px 5px; width:100%;">
+            `;
+            for (let i = 0; i < students.length; i += 2) {
+                printHtml += `<div class="print-row">`;
+                printHtml += generateSingleReport(students[i]);
+                if (i + 1 < students.length) printHtml += generateSingleReport(students[i + 1]);
+                printHtml += `</div>`;
+                if (i + 2 < students.length) printHtml += `<div class="page-break"></div>`;
+            }
+            printHtml += `</div>`;
+
+            const printArea = document.getElementById('printArea');
+            printArea.innerHTML = printHtml;
+            printArea.style.display = 'block';
+            setTimeout(() => {
+                window.print();
+                setTimeout(() => { printArea.style.display = 'none'; }, 500);
+            }, 400);
+        }
+
+        function generateSingleReport(student) {
+            const studentId = student.id;
+            const grade = student.grade;
+            const major = student.major;
+            const allLessons = LESSONS_DATA[grade]?.[major] || [];
+            const grades = allGradesData[studentId]?.grades || {};
+            const avg = calculateAverage(grades, allLessons);
+            const rank = calculateRank(studentId, allGradesData, allLessons);
+
+            let gradeRows = '';
+            if (allLessons.length === 0) {
+                gradeRows = `<tr><td colspan="3" style="text-align:center;color:#8aa0b3;">دروسی ثبت نشده است</td></tr>`;
+            } else {
+                allLessons.forEach(lesson => {
+                    const score = grades[lesson];
+                    const hasScore = (score !== null && score !== undefined && score !== '');
+                    const displayScore = hasScore ? toPersianNumber(score) : '—';
+                    const words = hasScore ? numberToPersianWords(score) : '—';
+                    gradeRows += `<tr><td>${lesson}</td><td>${displayScore}</td><td>${words}</td></tr>`;
+                });
+            }
+
+            return `
+                <div class="print-card">
+                    <div class="header">
+                        <h3>🏫 کارنامه تحصیلی</h3>
+                        <p>دبیرستان علامه · سال تحصیلی ۱۴۰۵-۱۴۰۴</p>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item"><span class="label">نام و نام خانوادگی</span><span class="value">${student.first_name} ${student.last_name}</span></div>
+                        <div class="info-item"><span class="label">کد دانش‌آموزی</span><span class="value">${toPersianNumber(student.student_code)}</span></div>
+                        <div class="info-item"><span class="label">نام پدر</span><span class="value">${student.father_name}</span></div>
+                        <div class="info-item"><span class="label">پایه / رشته</span><span class="value">${student.grade} - ${student.major}</span></div>
+                    </div>
+                    <table class="grade-table">
+                        <thead>
+                            <tr>
+                                <th style="width:50%;">نام درس</th>
+                                <th style="width:20%;">نمره</th>
+                                <th style="width:30%;">به حروف</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${gradeRows}
+                        </tbody>
+                    </table>
+                    <div class="stats">
+                        <span><span style="font-weight:700;">معدل:</span> <span class="average">${toPersianNumber(avg.toFixed(2))}</span></span>
+                        <span class="rank-badge">رتبه: ${toPersianNumber(rank)}</span>
+                    </div>
+                    <div class="footer-section">
+                        <div class="sign-box-left">
+                            <span class="title">مدیر مدرسه</span>
+                            <div class="sign-line"></div>
+                            <span class="name">فردوس بهرامی</span>
+                            <span class="sign-label">امضا</span>
+                        </div>
+                        <div class="sign-box-right">
+                            <span class="title">مسئول ثبت نمرات</span>
+                            <div class="sign-line"></div>
+                            <span class="name">نرمین عنایتی</span>
+                            <span class="sign-label">امضا</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        document.getElementById('searchInput').addEventListener('input', loadStudents);
+        document.getElementById('gradeFilter').addEventListener('change', loadStudents);
+        document.getElementById('majorFilter').addEventListener('change', loadStudents);
+        loadStudents();
+    </script>
+</body>
+</html>
